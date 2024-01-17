@@ -1,8 +1,6 @@
 package com.game.gooseapi.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +13,9 @@ public class Sessions {
     @OneToMany
     private Set<Goose> geeseSet = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
     public Sessions() {
     }
@@ -31,4 +32,19 @@ public class Sessions {
         this.sessionName = sessionName;
     }
 
+    public Set<Goose> getGeeseSet() {
+        return geeseSet;
+    }
+
+    public void setGeeseSet(Set<Goose> geeseSet) {
+        this.geeseSet = geeseSet;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
