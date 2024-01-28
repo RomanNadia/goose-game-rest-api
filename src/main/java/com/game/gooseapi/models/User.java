@@ -2,7 +2,10 @@ package com.game.gooseapi.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,8 +16,9 @@ public class User {
     private String username;
     private String password;
 
-    @OneToOne
-    private Sessions session;
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Role> roles;
 
     public String getUsername() {
         return username;
@@ -32,11 +36,11 @@ public class User {
         this.password = password;
     }
 
-    public Sessions getSession() {
-        return session;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setSession(Sessions session) {
-        this.session = session;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

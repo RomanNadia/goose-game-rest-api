@@ -31,9 +31,6 @@ public class Goose {
     @JoinColumn(name = "currentHat")
     private Hat currentHat;
 
-
-//    private int gooseCoins;
-
     @ManyToOne
     @JoinColumn(name = "sessionId")
     private Sessions sessions;

@@ -5,6 +5,7 @@ import com.game.gooseapi.models.User;
 import com.game.gooseapi.repositories.SessionRepository;
 import com.game.gooseapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,8 @@ public class LoginController {
     UserRepository userRepository;
     @Autowired
     SessionRepository sessionRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping("/registration")
     public String showRegistrationForm(WebRequest request, Model model) {
@@ -32,6 +35,7 @@ public class LoginController {
     public String registerUserAccount(@ModelAttribute User user, Model model) {
         Sessions session = new Sessions(user.getUsername() + "Session");
         session.setUser(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         sessionRepository.save(session);
         return "redirect:/pageForUsers";
@@ -41,5 +45,17 @@ public class LoginController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login";
+    }
+
+
+    @GetMapping("/pageForUsers")
+    public String getPageForUsers() {
+        return "pageForUsers";
     }
 }

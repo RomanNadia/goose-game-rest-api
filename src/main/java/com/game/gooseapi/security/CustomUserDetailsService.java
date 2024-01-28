@@ -7,10 +7,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -18,32 +19,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDetails loadUserByUsername(String username) {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
-//        if (user == null) {
-//            throw new UsernameNotFoundException("No user found with username: " + email);
-//        }
-//
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), enabled, accountNonExpired,
-                credentialsNonExpired, accountNonLocked, getAuthorities());
-    }
-
-    private static List<GrantedAuthority> getAuthorities () {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        List<String> roles = new ArrayList<>();
-        roles.add("USER");
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
+        if(user==null){
+            new UsernameNotFoundException("User not exists by Username");
         }
-        return authorities;
-    }
 
+        Set<GrantedAuthority> authorities = user.getRoles().stream()
+                .map((role) -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toSet());
+
+        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
+    }
 
 }
