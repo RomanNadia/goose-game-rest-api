@@ -20,10 +20,10 @@ import java.util.List;
 
 @Controller
 public class GooseController {
-    private GooseRepository gooseRepository;
-    private SessionRepository sessionRepository;
-    private HatRepository hatRepository;
-    private GooseService gooseService;
+    private final GooseRepository gooseRepository;
+    private final SessionRepository sessionRepository;
+    private final HatRepository hatRepository;
+    private final GooseService gooseService;
 
     @Autowired
     public GooseController(GooseRepository gooseRepository, SessionRepository sessionRepository,
@@ -62,7 +62,7 @@ public class GooseController {
                 long timeMilliNow = date.getTime();
                 goose.setLastUpdateTime(timeMilliNow);
 
-                //only default hat during creation
+                //setting default hat (no hat) during creation
                 goose.setCurrentHat(hatRepository.findHatById(ApplicationConfig.ID_OF_DEFAULT_CURRENT_HAT));
 
                 gooseRepository.save(goose);
@@ -168,6 +168,7 @@ public class GooseController {
             return OperationStatus.FAILED;
         }
     }
+
 
 
 }

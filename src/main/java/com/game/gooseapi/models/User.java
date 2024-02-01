@@ -16,10 +16,6 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Set<Role> roles;
-
     public String getUsername() {
         return username;
     }
@@ -37,10 +33,12 @@ public class User {
     }
 
     public Set<Role> getRoles() {
+        Set<Role> roles = new HashSet<>();
+        Role role = new Role();
+        role.setId(1);
+        role.setName("USER");
+        roles.add(role);
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }

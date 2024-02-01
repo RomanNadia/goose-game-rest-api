@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @Controller
 public class HatController {
-    private HatRepository hatRepository;
+    private final HatRepository hatRepository;
 
     @Autowired
     public HatController(HatRepository hatRepository) {
